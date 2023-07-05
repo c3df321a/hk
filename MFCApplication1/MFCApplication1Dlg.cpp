@@ -260,7 +260,7 @@ BOOL CMFCApplication1Dlg::DoLogin()
 
 	NET_DVR_DEVICEINFO_V30 DeviceInfoTmp;
 
-	//初始化
+	//初始化，不需要设置额外属性因此全赋值为零即可
 	memset(&DeviceInfoTmp, 0, sizeof(NET_DVR_DEVICEINFO_V30));
 
 	//获取消息框内容
@@ -288,6 +288,7 @@ BOOL CMFCApplication1Dlg::DoLogin()
 		(char*)str_user.GetBuffer(str_user.GetLength()), (char*)str_password.GetBuffer(str_password.GetLength()), &DeviceInfoTmp);
 	
 	//用户设备注册
+	//整个程序最关键的变量，记录登录者的信息
 	LONG lLoginID = NET_DVR_Login_V30(CDeviceIp, _wtoi(str_port), Cueser, Cpassword, &DeviceInfoTmp);
 	if (lLoginID == -1)
 	{
@@ -295,26 +296,14 @@ BOOL CMFCApplication1Dlg::DoLogin()
 		return FALSE;
 	}
 
-	//云台控制
-	GetDlgItem(IDC_BUTTON_up)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_down)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_left)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_right)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_stop)->EnableWindow(TRUE);
-	//播放按钮
-	GetDlgItem(IDC_BUTTON_play)->EnableWindow(TRUE);
-	//位置点设置
-	GetDlgItem(IDC_BUTTON_preset_delete)->EnableWindow(TRUE);
-	GetDlgItem(IDC_COMBO_preset)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_preset_set)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_preset_call)->EnableWindow(TRUE);
+	
 
 	//初始化账户信息
 	m_struDeviceInfo.lLoginID = lLoginID;//ID
-	m_struDeviceInfo.iDeviceChanNum = DeviceInfoTmp.byChanNum;//设备的通道数
-	m_struDeviceInfo.iIPChanNum = DeviceInfoTmp.byIPChanNum;//最大数字通道个数
-	m_struDeviceInfo.iStartChan = DeviceInfoTmp.byStartChan;//设备开始通道号
-	m_struDeviceInfo.iIPStartChan = DeviceInfoTmp.byStartDChan;//数字通道起始通道号
+	m_struDeviceInfo.iDeviceChanNum = 0;//设备的通道数
+	m_struDeviceInfo.iIPChanNum = 1;//最大数字通道个数
+	m_struDeviceInfo.iStartChan = 0;//设备开始通道号
+	m_struDeviceInfo.iIPStartChan = 1;//数字通道起始通道号
 
 	
 
@@ -334,9 +323,11 @@ void CMFCApplication1Dlg::OnBnClickedButtonlogin()
 	{
 		if (!DoLogin())
 			return;    
-		GetDlgItem(IDC_BUTTON_login)->SetWindowText(_T("Logout"));
+		GetDlgItem(IDC_BUTTON_login)->SetWindowText(_T("注销"));
 		GetDlgItem(IDOK)->EnableWindow(FALSE);//当摄像头登录成功后，不允许点击退出按钮
-		GetDlgItem(IDC_STATIC_left)->EnableWindow(TRUE);//当摄像头登录成功后，允许点操作云台
+		//GetDlgItem(IDC_STATIC_left)->EnableWindow(TRUE);//当摄像头登录成功后，允许点操作云台
+		//播放按钮
+		GetDlgItem(IDC_BUTTON_play)->EnableWindow(TRUE);
 		m_bIsLogin = TRUE;
 
 	}
@@ -344,11 +335,11 @@ void CMFCApplication1Dlg::OnBnClickedButtonlogin()
 	{ 
 		if (m_bIsPlaying)
 		{
-			MessageBox(_T("Stop Play  first!"));
+			MessageBox(_T("请先暂停播放"));
 			return;
 		}
 		NET_DVR_Logout_V30(m_struDeviceInfo.lLoginID);//Logout函数
-		GetDlgItem(IDC_BUTTON_login)->SetWindowText(_T("Login"));//按钮文字变化
+		GetDlgItem(IDC_BUTTON_login)->SetWindowText(_T("登入"));//按钮文字变化
 		GetDlgItem(IDOK)->EnableWindow(	TRUE);//当摄像头注销后，允许点击退出按钮
 		GetDlgItem(IDC_STATIC_left)->EnableWindow(FALSE);//当摄像头注销后，不允许点操作云台
 		m_struDeviceInfo.lLoginID = -1;//重初始化
@@ -358,13 +349,13 @@ void CMFCApplication1Dlg::OnBnClickedButtonlogin()
 
 
 /*************************************************
-函数名:    	InitDecoderReferCtrl
+函数名:    	PresetControl
 函数描述:	预制点按钮逻辑
 输入参数:
 输出参数:
 返回值:
 **************************************************/
-void CMFCApplication1Dlg::InitDecoderReferCtrl()
+void CMFCApplication1Dlg::PresetControl()
 {
 
 	m_comboPreset.SetCurSel(0);
@@ -466,18 +457,9 @@ void CMFCApplication1Dlg::OnBnClickedButtonpresetdelete()
 			return;
 		}
 	}
-	else
-	{
-		if (!NET_DVR_PTZPreset_Other(m_struDeviceInfo.lLoginID, m_struDeviceInfo.struChanInfo[m_iCurChanIndex].iChanIndex, \
-			CLE_PRESET, iPreset))
-		{
-			MessageBox(_T("删除预置点失败"));
-			return;
-		}
-
-	}
 
 	//添加到预置点信息
+	//从本地的用户摄像头数据一步一步找到巡航点的定义
 	m_struDeviceInfo.struChanInfo[m_iCurChanIndex].struDecodercfg.bySetPreset[iPreset - 1] = FALSE;
 	//更新按钮状态
 
@@ -581,7 +563,17 @@ void CMFCApplication1Dlg::OnBnClickedButtonplay()
 		m_bIsPlaying = TRUE;
 		GetDlgItem(IDC_BUTTON_play)->SetWindowText(_T("停止播放"));
 		GetDlgItem(IDC_BUTTON2)->EnableWindow(TRUE);
-		
+		//云台控制
+		GetDlgItem(IDC_BUTTON_up)->EnableWindow(TRUE);
+		GetDlgItem(IDC_BUTTON_down)->EnableWindow(TRUE);
+		GetDlgItem(IDC_BUTTON_left)->EnableWindow(TRUE);
+		GetDlgItem(IDC_BUTTON_right)->EnableWindow(TRUE);
+		GetDlgItem(IDC_BUTTON_stop)->EnableWindow(TRUE);
+		//位置点设置
+		GetDlgItem(IDC_BUTTON_preset_delete)->EnableWindow(TRUE);
+		GetDlgItem(IDC_COMBO_preset)->EnableWindow(TRUE);
+		GetDlgItem(IDC_BUTTON_preset_set)->EnableWindow(TRUE);
+		GetDlgItem(IDC_BUTTON_preset_call)->EnableWindow(TRUE);
 
 	}
 	else
@@ -611,10 +603,11 @@ void CMFCApplication1Dlg::StartPlay()
 	NET_DVR_CLIENTINFO ClientInfo;
 	ClientInfo.hPlayWnd = GetDlgItem(IDC_STATIC_play)->m_hWnd;//在dlg中播放的位置
 	ClientInfo.lChannel = m_iCurChanIndex ;//默认第一路播放，初始值放在初始化当中。
-	ClientInfo.lLinkMode = 0;//解码流？不懂
-	ClientInfo.sMultiCastIP = NULL;
-	TRACE("Channel number:%d\n", ClientInfo.lChannel);
-	//连接摄像头
+	ClientInfo.lLinkMode = 0;//主解码流，因为只有一台摄像机所以无所谓
+	ClientInfo.sMultiCastIP = NULL;//多组播放地址，仅有一台设备，无所谓
+
+
+	//调用摄像头，并获取函数返回的句柄
 	m_lPlayHandle = NET_DVR_RealPlay_V30(m_struDeviceInfo.lLoginID, &ClientInfo, NULL, NULL, TRUE);
 	if (-1 == m_lPlayHandle)
 	{
@@ -645,16 +638,32 @@ void CMFCApplication1Dlg::StopPlay()
 	//如果不是关闭状态
 	if (m_lPlayHandle != -1)
 	{
-		//关闭连接
+		//关闭播放
 		NET_DVR_StopRealPlay(m_lPlayHandle);
 		//重初始化初始化数据
-		//
 		m_lPlayHandle = -1;
 		//播放状态
 		m_bIsPlaying = FALSE;
 		GetDlgItem(IDC_STATIC_play)->Invalidate();
 		GetDlgItem(IDC_STATIC_play)->ShowWindow(FALSE); //关闭窗口显示
 		GetDlgItem(IDC_STATIC_play)->ShowWindow(TRUE); //打开窗口显示,相当于把窗体重启,清除Picture控件的残余
+		//云台控制
+		GetDlgItem(IDC_BUTTON_up)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_down)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_left)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_right)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_stop)->EnableWindow(FALSE);
+		//播放按钮
+		GetDlgItem(IDC_BUTTON_play)->EnableWindow(FALSE);
+		//位置点设置
+		GetDlgItem(IDC_BUTTON_preset_delete)->EnableWindow(FALSE);
+		GetDlgItem(IDC_COMBO_preset)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_preset_set)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON_preset_call)->EnableWindow(FALSE);
+
+		//二值化处理
+		GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
+		GetDlgItem(IDC_BUTTON3)->EnableWindow(FALSE);
 	}
 
 }
@@ -669,6 +678,7 @@ void CMFCApplication1Dlg::StopPlay()
 **************************************************/
 void CMFCApplication1Dlg::OnBnClickedCancel()
 {
+	//重写退出按钮的函数，直接关闭程序
 	// TODO: 在此添加控件通知处理程序代码
 	exit(0);
 }
@@ -736,8 +746,9 @@ void CMFCApplication1Dlg::VedioBinary()
 	//嵌套opencv窗口
 	HWND hWnd = (HWND)cvGetWindowHandle("ImageShow");
 	HWND hParent = ::GetParent(hWnd);//获得父窗口
+	//::作用域限定符，限定使用mfc原生的函数因为多一个hWnd参数
 	::SetParent(hWnd, GetDlgItem(IDC_PICTURESHOW)->m_hWnd);//绑定窗口
-	::ShowWindow(hParent, SW_HIDE);
+	::ShowWindow(hParent, SW_HIDE);//输出并隐藏窗口
 	CWnd* pWnd = GetDlgItem(IDC_PICTURESHOW);//IDC_picture为picture控件ID
 	pWnd->GetClientRect(&rc);//rc为控件的大小。
 
@@ -751,16 +762,10 @@ void CMFCApplication1Dlg::VedioBinary()
 	capture.open("rtsp://admin:hk123456@192.168.1.64");
 	capture.set(cv::CAP_PROP_FPS, 30);
 	CaptureRelease = false;
-	//创建VideoCapture对象的另一种方式
-	//VideoCapture capture("rtsp://admin:hikvision2021@192.168.1.64");
 
-	/*int frameH = capture.get(4);
-	int frameW = capture.get(3);
-	cout << "frameH:" << frameH << "  frameW:" << frameW << endl;*/
-	
-	cv::Mat frame;
-	cv::Mat imgGray;
-	cv::Mat dst;
+	cv::Mat frame;//原始抓取图像
+	cv::Mat imgGray;//灰度图像
+	cv::Mat dst;//二值化图像
 
 	//目前无法进行复杂的图像处理，图像处理速度太慢
 	while (CaptureRelease==false)
@@ -771,15 +776,12 @@ void CMFCApplication1Dlg::VedioBinary()
 		threshold(imgGray, dst, 127, 255, cv::THRESH_BINARY);//二值化阈值处理
 		//cv::adaptiveThreshold(imgGray, dst, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 2);//自动阈值分割，高斯邻域
 		//https ://blog.csdn.net/qq_43784519/article/details/127242922
-		resize(dst, dst, cv::Size(rc.Width(), rc.Height()));
+		resize(dst, dst, cv::Size(rc.Width(), rc.Height()));//设置窗口大小
 		imshow("ImageShow", dst);
 		cv::waitKey(1);
 		
 
 	}
-
-	//destroyWindow("test");
-	//capture.release();//必须加release释放，否则会内存泄漏
 }
 
 /*************************************************

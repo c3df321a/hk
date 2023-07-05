@@ -76,8 +76,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Users\BaSO4\Desktop\mfc\MFCApplication1\lib;D:\opencv\opencv\build\x64\vc16\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\BaSO4\Desktop\mfc\MFCApplication1\head;D:\opencv\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\BaSO4\Desktop\new\MFCApplication1\lib;D:\opencv\opencv\build\x64\vc16\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\BaSO4\Desktop\new\MFCApplication1\head;D:\opencv\opencv\build\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

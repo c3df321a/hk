@@ -32,6 +32,7 @@ protected:
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
+	//声明消息相应函数
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
@@ -39,16 +40,15 @@ protected:
 public:
 	afx_msg void OnBnClickedButtonpresetdelete();
 	BOOL DoLogin();//判断登入状态
-	LOCAL_DEVICE_INFO m_struDeviceInfo;
-	//当前通道在数组中索引,应该默认是0通道？？？？？？？？？？？？？？？
+	LOCAL_DEVICE_INFO m_struDeviceInfo;//存储本地设备信息
 	int m_iCurChanIndex;    //默认摄像头在1通道           
 	CComboBox m_comboPreset;//combo box
-	LONG m_lPlayHandle;//接收NET_DVR_RealPlay_V30的返回值，并且作为是否连接成功的判断
+	LONG m_lPlayHandle;//接收NET_DVR_RealPlay_V30的返回值，并且作为是否播放成功的判断
 	bool m_bIsPlaying;//摄像头播放检查
 	bool m_bIsLogin;//账户登入信息检查
 	int iPTZSpeed;//云台速度
-	afx_msg void OnBnClickedButtonlogin();
-	void InitDecoderReferCtrl();
+	afx_msg void OnBnClickedButtonlogin();//登入
+	void PresetControl();
 	CIPAddressCtrl m_ctrlDevIp;//IP地址
 	CEdit m_csUser;//用户名
 	CEdit m_nDevPort;//端口
@@ -79,6 +79,5 @@ public:
 	afx_msg void VedioBinaryStop();
 	cv::VideoCapture capture;
 	BOOL CaptureRelease;
-	//void DisplayVideoFrame(Mat);
 	CRect rc;//控件大小信息
 };
