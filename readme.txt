@@ -1,1 +1,286 @@
-本程序依托于海康sdk和opencv的库实现，项目中采取外部包含来链接库文件，请在项目属性->配置属性->VC++目录中更改包含目录和库目录
+#line 1"C:\\Users\\qlwb\\source\\repos\\c3df321a\\hk\\MFCApplication1\\MFCApplication1.rc"
+#line 1
+// Microsoft Visual C++ generated resource script.
+//
+#pragma code_page(65001)
+#line 5
+#include "resource.h"
+#line 7
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+#include "verrsrc.h"
+#line 18
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+#line 21
+/////////////////////////////////////////////////////////////////////////////
+// 中文(简体，中国) resources
+#line 24
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#line 27
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+#line 33
+1 TEXTINCLUDE 
+BEGIN
+"resource.h\0"
+END
+#line 38
+2 TEXTINCLUDE 
+BEGIN
+"#ifndef APSTUDIO_INVOKED\r\n"
+"#include ""targetver.h""\r\n"
+"#endif\r\n"
+"#include ""afxres.h""\r\n"
+"#include ""verrsrc.h""\r\n"
+"\0"
+END
+#line 48
+3 TEXTINCLUDE 
+BEGIN
+"#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+"#define _AFX_NO_OLE_RESOURCES\r\n"
+"#define _AFX_NO_TRACKER_RESOURCES\r\n"
+"#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+"\r\n"
+"#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+"LANGUAGE 4, 2\r\n"
+"#include ""res\\MFCApplication1.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+"#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
+"#if !defined(_AFXDLL)\r\n"
+"#include ""l.CHS\\afxribbon.rc""   // MFC 功能区和控制条资源\r\n"
+"#endif\r\n"
+"#endif\r\n"
+"\0"
+END
+#line 66
+#endif    // APSTUDIO_INVOKED
+#line 69
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+#line 74
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\MFCApplication1.ico"
+#line 79
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+#line 84
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于 MFCApplication1"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
+LTEXT           "MFCApplication1，版本 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+LTEXT           "版权所有 (C) 2023",IDC_STATIC,42,26,114,8
+DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
+END
+#line 95
+IDD_MFCAPPLICATION1_DIALOG DIALOGEX 0, 0, 550, 237
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | DS_CENTERMOUSE | WS_POPUP | WS_VISIBLE | WS_CAPTION
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "云台控制加简单的图像处理"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+GROUPBOX        "",IDC_STATIC_top,7,7,536,22
+PUSHBUTTON      "Login",IDC_BUTTON_login,342,15,31,14,BS_VCENTER
+GROUPBOX        "",IDC_STATIC_botoom,7,28,536,202
+GROUPBOX        "控制",IDC_STATIC_left,7,32,101,198,WS_DISABLED
+GROUPBOX        "准备播放",IDC_STATIC_play,243,29,300,201
+PUSHBUTTON      "下",IDC_BUTTON_up,46,94,22,14
+PUSHBUTTON      "上",IDC_BUTTON_down,48,53,22,14
+PUSHBUTTON      "左",IDC_BUTTON_left,14,71,22,14
+PUSHBUTTON      "右",IDC_BUTTON_right,79,71,22,14
+GROUPBOX        "预置点",IDC_STATIC_LOCATE,7,121,101,85
+PUSHBUTTON      "删除",IDC_BUTTON_preset_delete,77,157,22,14
+PUSHBUTTON      "设置",IDC_BUTTON_preset_set,77,133,22,14
+PUSHBUTTON      "调用",IDC_BUTTON_preset_call,77,181,22,14
+COMBOBOX        IDC_COMBO_preset,18,159,34,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+LTEXT           "IP",IDC_STATIC,15,15,8,8
+CONTROL         "",IDC_IPADDRESS_ip,"SysIPAddress32",WS_TABSTOP,23,14,100,15
+LTEXT           "端口",IDC_STATIC,127,16,20,8
+EDITTEXT        IDC_EDIT_port,144,15,40,14,ES_AUTOHSCROLL
+LTEXT           "用户",IDC_STATIC,194,18,20,8
+EDITTEXT        IDC_EDIT_user,211,15,40,14,ES_AUTOHSCROLL
+LTEXT           "密码",IDC_STATIC,262,18,20,8
+EDITTEXT        IDC_EDIT_password,281,15,40,14,ES_PASSWORD | ES_AUTOHSCROLL
+PUSHBUTTON      "播放视频",IDC_BUTTON_play,26,216,50,14
+PUSHBUTTON      "退出",IDOK,394,15,37,14
+PUSHBUTTON      "停止",IDC_BUTTON_stop,44,71,27,16
+PUSHBUTTON      "二值化处理",IDC_BUTTON2,123,155,57,15
+PUSHBUTTON      "停止",IDC_BUTTON3,189,155,44,14
+GROUPBOX        "二值化处理",IDC_PICTURESHOW,114,42,120,102
+GROUPBOX        "",IDC_STATIC,114,36,126,192
+END
+#line 133
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+#line 138
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION 1,0,0,1
+PRODUCTVERSION 1,0,0,1
+FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+FILEFLAGS 0x1L
+#else
+FILEFLAGS 0x0L
+#endif
+FILEOS 0x40004L
+FILETYPE 0x1L
+FILESUBTYPE 0x0L
+BEGIN
+BLOCK "StringFileInfo"
+BEGIN
+BLOCK "080404B0"
+BEGIN
+VALUE "CompanyName", "TODO: <公司名>"
+VALUE "FileDescription", "MFCApplication1"
+VALUE "FileVersion", "1.0.0.1"
+VALUE "InternalName", "MFCApplication1.exe"
+VALUE "LegalCopyright", "TODO:  (C) <公司名>。  保留所有权利。"
+VALUE "OriginalFilename", "MFCApplication1.exe"
+VALUE "ProductName", "TODO: <产品名>"
+VALUE "ProductVersion", "1.0.0.1"
+END
+END
+BLOCK "VarFileInfo"
+BEGIN
+VALUE "Translation", 0x804, 1200
+END
+END
+#line 172
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+#line 177
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+IDD_ABOUTBOX, DIALOG
+BEGIN
+LEFTMARGIN, 7
+RIGHTMARGIN, 163
+TOPMARGIN, 7
+BOTTOMMARGIN, 55
+END
+#line 188
+IDD_MFCAPPLICATION1_DIALOG, DIALOG
+BEGIN
+LEFTMARGIN, 7
+RIGHTMARGIN, 543
+TOPMARGIN, 7
+BOTTOMMARGIN, 230
+END
+END
+#endif    // APSTUDIO_INVOKED
+#line 199
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+#line 204
+IDD_MFCAPPLICATION1_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+0,
+0, 0, 100, 0,
+0, 0, 0, 0,
+0, 0, 100, 100,
+0, 0, 0, 100,
+0, 0, 100, 100,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0,
+0, 0, 0, 0
+END
+#line 239
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+#line 244
+IDD_MFCAPPLICATION1_DIALOG DLGINIT
+BEGIN
+IDC_COMBO_preset, 0x403, 8, 0
+0xbbce, 0xc3d6, 0xe3b5, 0x0031, 
+IDC_COMBO_preset, 0x403, 8, 0
+0xbbce, 0xc3d6, 0xe3b5, 0x0032, 
+IDC_COMBO_preset, 0x403, 8, 0
+0xbbce, 0xc3d6, 0xe3b5, 0x0033, 
+IDC_COMBO_preset, 0x403, 8, 0
+0xbbce, 0xc3d6, 0xe3b5, 0x0034, 
+0
+END
+#line 258
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+#line 263
+STRINGTABLE
+BEGIN
+IDS_ABOUTBOX            "关于 MFCApplication1(&A)..."
+END
+#line 268
+#endif    // 中文(简体，中国) resources
+/////////////////////////////////////////////////////////////////////////////
+#line 273
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+#line 283
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#include "res\MFCApplication1.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "l.CHS\afxres.rc"      // 标准组件
+#if !defined(_AFXDLL)
+#include "l.CHS\afxribbon.rc"   // MFC 功能区和控制条资源
+#endif
+#endif
+#line 292
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
